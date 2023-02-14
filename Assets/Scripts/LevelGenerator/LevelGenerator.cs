@@ -25,9 +25,6 @@ public class LevelGenerator : MonoBehaviour
         Instantiate(rooms[0], transform.position, Quaternion.identity);
 
         direction = 5;
-
-        
-
         
     }
 

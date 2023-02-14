@@ -5,7 +5,7 @@ using UnityEngine;
 public class LevelGenerator : MonoBehaviour
 {
     [SerializeField] Transform[] startingPosition;
-    [SerializeField] GameObject[] rooms; // index 0 --> start B, index 1 --> LR, index 2 --> LRB, index 3 --> LRT, index 4 --> LRTB, index 5 --> end T
+    public GameObject[] rooms; // index 0 --> start B, index 1 --> LR, index 2 --> LRB, index 3 --> LRT, index 4 --> LRTB, index 5 --> end T
     [SerializeField] float moveAmount;
     [SerializeField] float minX;
     [SerializeField] float maxX;
@@ -15,7 +15,8 @@ public class LevelGenerator : MonoBehaviour
     private float startTimeBetweenRoom = 0.25f; 
     private float timeBetweenRoom;
     private int direction;
-    private bool generation = true;
+    public bool generation = true;
+    private int downCounter;
 
     private void Start()
     {
@@ -25,7 +26,7 @@ public class LevelGenerator : MonoBehaviour
 
         direction = 5;
 
-        Debug.Log(rooms.Length);
+        
 
         
     }
@@ -45,13 +46,16 @@ public class LevelGenerator : MonoBehaviour
 
     private void Move()
     {
-        if(direction == 1 || direction == 2) // Move Right
+        Debug.Log(downCounter);
+        if (direction == 1 || direction == 2) // Move Right
         {
-            if(transform.position.x >= maxX)
+
+            if (transform.position.x >= maxX)
             {
                 direction = 5;
                 return;
             }
+            downCounter = 0;
 
             Vector3 newPos = new Vector3(transform.position.x + moveAmount, 0, transform.position.z);
             transform.position = newPos;
@@ -67,11 +71,14 @@ public class LevelGenerator : MonoBehaviour
         } 
         else if(direction == 3 || direction == 4) //Move Left
         {
+
             if(transform.position.x <= minX)
             {
                 direction = 5;
                 return;
             }
+            downCounter = 0;
+
             Vector3 newPos = new Vector3(transform.position.x - moveAmount, 0, transform.position.z);
             transform.position = newPos;
 
@@ -82,31 +89,59 @@ public class LevelGenerator : MonoBehaviour
         } 
         else if(direction == 5) // Move Down
         {
-            if(transform.position.z <= minZ)
-            {
-
-                Vector3 endPos = new Vector3(transform.position.x, 0, transform.position.z - moveAmount);
-                transform.position = endPos;
-
-                Instantiate(rooms[rooms.Length - 1], transform.position, Quaternion.identity);
-
-                generation = false;
-                return;
-            }
+            downCounter++;
 
             Collider[] roomDetection = Physics.OverlapSphere(transform.position, 1, room);
             foreach( var roomCollider in roomDetection)
             {
-                if (roomCollider.GetComponent<RoomType>().type != 2 && roomCollider.GetComponent<RoomType>().type != 4)
+                if (transform.position.z <= minZ)
                 {
-                    roomCollider.GetComponent<RoomType>().RoomDestruction();
-
-                    int randBottomRoom = Random.Range(2, 5);
-                    if (randBottomRoom == 3)
+                    if(roomCollider.GetComponent<RoomType>().type != 2 && roomCollider.GetComponent<RoomType>().type != 4)
                     {
-                        randBottomRoom = 2;
+                        if (downCounter >= 2)
+                        {
+                            roomCollider.GetComponent<RoomType>().RoomDestruction();
+                            Instantiate(rooms[4], transform.position, Quaternion.identity);
+                        }
+                        else
+                        {
+                            roomCollider.GetComponent<RoomType>().RoomDestruction();
+
+                            int randBottomRoom = Random.Range(2, 5);
+                            if (randBottomRoom == 3)
+                            {
+                                randBottomRoom = 2;
+                            }
+                            Instantiate(rooms[randBottomRoom], transform.position, Quaternion.identity);
+                        }
                     }
-                    Instantiate(rooms[randBottomRoom], transform.position, Quaternion.identity);
+
+                    Vector3 endPos = new Vector3(transform.position.x, 0, transform.position.z - moveAmount);
+                    transform.position = endPos;
+
+                    Instantiate(rooms[rooms.Length - 1], transform.position, Quaternion.identity);
+
+                    generation = false;
+                    return;
+                }
+                else if (roomCollider.GetComponent<RoomType>().type != 2 && roomCollider.GetComponent<RoomType>().type != 4)
+                {
+                    if(downCounter >= 2)
+                    {
+                        roomCollider.GetComponent<RoomType>().RoomDestruction();
+                        Instantiate(rooms[4], transform.position, Quaternion.identity);
+                    }
+                    else
+                    {
+                        roomCollider.GetComponent<RoomType>().RoomDestruction();
+
+                        int randBottomRoom = Random.Range(2, 5);
+                        if (randBottomRoom == 3)
+                        {
+                            randBottomRoom = 2;
+                        }
+                        Instantiate(rooms[randBottomRoom], transform.position, Quaternion.identity);
+                    }
                 }
             }
 

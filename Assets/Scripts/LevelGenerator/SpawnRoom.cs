@@ -27,6 +27,7 @@ public class SpawnRoom : MonoBehaviour
             {
                 Debug.Log("sollte nur 1 Mal stehen");
                 Instantiate(goldenRoom, transform.position, Quaternion.identity);
+                Destroy(gameObject);
                 return;
             }
             int rand = Random.Range(1, levelGen.rooms.Length - 1);

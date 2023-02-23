@@ -14,8 +14,8 @@ public class SpawnRoom : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Collider[] goldRoomCollider = Physics.OverlapSphere(transform.position, 200, checkGoldenRoom);
-        Collider[] roomCollider = Physics.OverlapSphere(transform.position, 1, whatIsRoom);
+        Collider[] goldRoomCollider = Physics.OverlapSphere(transform.position, 800, checkGoldenRoom);
+        Collider[] roomCollider = Physics.OverlapSphere(transform.position, 4, whatIsRoom);
 
 
 

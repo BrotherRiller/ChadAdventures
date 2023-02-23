@@ -34,8 +34,8 @@ Transform:
   m_GameObject: {fileID: 787290178841676413}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 220, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 4, y: 4, z: 4}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1302274581375663340}
   m_Father: {fileID: 0}
@@ -170,7 +170,7 @@ GameObject:
   - component: {fileID: 1302274581375663341}
   - component: {fileID: 1302274581375663342}
   - component: {fileID: 1859038329489922313}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LRB Asian
   m_TagString: Untagged
   m_Icon: {fileID: 0}

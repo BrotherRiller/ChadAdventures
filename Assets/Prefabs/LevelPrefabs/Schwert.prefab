@@ -123,6 +123,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7237269678775832154}
+  - component: {fileID: 835001915218995896}
+  - component: {fileID: 2322225162957601154}
   m_Layer: 0
   m_Name: Schwert
   m_TagString: Untagged
@@ -150,6 +152,31 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &835001915218995896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1397931022778038804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daacef47ccb950a4eaffccb30884aa00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &2322225162957601154
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1397931022778038804}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 6.58, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2690493436460878346
 GameObject:
   m_ObjectHideFlags: 0

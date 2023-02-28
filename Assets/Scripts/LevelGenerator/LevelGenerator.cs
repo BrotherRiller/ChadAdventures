@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
 {
+    [SerializeField] GameObject LevelField;
     [SerializeField] Transform[] startingPosition;
     public GameObject[] rooms; // index 0 --> start B, index 1 --> LR, index 2 --> LRB, index 3 --> LRT, index 4 --> LRTB, index 5 --> end T
     [SerializeField] float moveAmount;
@@ -13,6 +14,7 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] LayerMask room;
 
     private float startTimeBetweenRoom = 0.25f; 
+    private GameObject parentRoom;
     private float timeBetweenRoom;
     private int direction;
     public bool generation = true;
@@ -22,7 +24,8 @@ public class LevelGenerator : MonoBehaviour
     {
         int randStartigPos = Random.Range(0, startingPosition.Length);
         transform.position = startingPosition[randStartigPos].position;
-        Instantiate(rooms[0], transform.position, Quaternion.identity);
+        parentRoom = Instantiate(rooms[0], transform.position, Quaternion.identity);
+        parentRoom.transform.SetParent(LevelField.transform);
 
         direction = 5;
         
@@ -58,7 +61,8 @@ public class LevelGenerator : MonoBehaviour
             transform.position = newPos;
 
             int rand = Random.Range(1, rooms.Length - 1 );
-            Instantiate(rooms[rand], transform.position, Quaternion.identity);
+            parentRoom = Instantiate(rooms[rand], transform.position, Quaternion.identity);
+            parentRoom.transform.SetParent(LevelField.transform); ;
 
             direction = Random.Range(1, 6);
             if(direction == 3 || direction == 4)
@@ -80,7 +84,8 @@ public class LevelGenerator : MonoBehaviour
             transform.position = newPos;
 
             int rand = Random.Range(1, rooms.Length - 1);
-            Instantiate(rooms[rand], transform.position, Quaternion.identity);
+            parentRoom = Instantiate(rooms[rand], transform.position, Quaternion.identity);
+            parentRoom.transform.SetParent(LevelField.transform);
 
             direction = Random.Range(3, 6); 
         } 
@@ -98,7 +103,8 @@ public class LevelGenerator : MonoBehaviour
                         if (downCounter >= 2)
                         {
                             roomCollider.GetComponent<RoomType>().RoomDestruction();
-                            Instantiate(rooms[4], transform.position, Quaternion.identity);
+                            parentRoom = Instantiate(rooms[4], transform.position, Quaternion.identity);
+                            parentRoom.transform.SetParent(LevelField.transform);
                         }
                         else
                         {
@@ -109,14 +115,16 @@ public class LevelGenerator : MonoBehaviour
                             {
                                 randBottomRoom = 2;
                             }
-                            Instantiate(rooms[randBottomRoom], transform.position, Quaternion.identity);
+                            parentRoom = Instantiate(rooms[randBottomRoom], transform.position, Quaternion.identity);
+                            parentRoom.transform.SetParent(LevelField.transform);
                         }
                     }
 
                     Vector3 endPos = new Vector3(transform.position.x, 0, transform.position.z - moveAmount);
                     transform.position = endPos;
 
-                    Instantiate(rooms[rooms.Length - 1], transform.position, Quaternion.identity);
+                    parentRoom = Instantiate(rooms[rooms.Length - 1], transform.position, Quaternion.identity);
+                    parentRoom.transform.SetParent(LevelField.transform);
 
                     generation = false;
                     return;
@@ -126,7 +134,8 @@ public class LevelGenerator : MonoBehaviour
                     if(downCounter >= 2)
                     {
                         roomCollider.GetComponent<RoomType>().RoomDestruction();
-                        Instantiate(rooms[4], transform.position, Quaternion.identity);
+                        parentRoom = Instantiate(rooms[4], transform.position, Quaternion.identity);
+                        parentRoom.transform.SetParent(LevelField.transform);
                     }
                     else
                     {
@@ -137,7 +146,8 @@ public class LevelGenerator : MonoBehaviour
                         {
                             randBottomRoom = 2;
                         }
-                        Instantiate(rooms[randBottomRoom], transform.position, Quaternion.identity);
+                        parentRoom = Instantiate(rooms[randBottomRoom], transform.position, Quaternion.identity);
+                        parentRoom.transform.SetParent(LevelField.transform);
                     }
                 }
             }
@@ -146,7 +156,8 @@ public class LevelGenerator : MonoBehaviour
             transform.position = newPos;
 
             int rand = Random.Range(3, rooms.Length - 1);
-            Instantiate(rooms[rand], transform.position, Quaternion.identity);
+            parentRoom = Instantiate(rooms[rand], transform.position, Quaternion.identity);
+            parentRoom.transform.SetParent(LevelField.transform);
 
             direction = Random.Range(1, 6);
         }

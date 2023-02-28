@@ -9,9 +9,15 @@ public class ThirdPersonMovement : MonoBehaviour
     [SerializeField] Transform cam;
     [SerializeField] float speed = 6f;
     [SerializeField] float turnSmoothTime = 0.1f;
+    [SerializeField] float jumpSpeed;
+    [SerializeField] GameObject damageDealer;
 
     private float turnSmoothVelocity;
+    private float gravity;
+    private CharacterController character;
+    private float originalStepOffset;
     private Animator anim;
+    private bool isAttacking;
 
     public enum PlayerState
     {
@@ -27,6 +33,8 @@ public class ThirdPersonMovement : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         anim = GetComponent<Animator>();
         currentState = PlayerState.idle;
+        character = GetComponent<CharacterController>();
+        originalStepOffset = character.stepOffset;
     }
 
     // Update is called once per frame
@@ -35,6 +43,32 @@ public class ThirdPersonMovement : MonoBehaviour
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
         Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
+
+        gravity += Physics.gravity.y * Time.deltaTime;
+
+        Vector3 velocity = direction * direction.magnitude;
+        velocity.y = gravity;
+
+        character.Move(velocity * Time.deltaTime);
+        if (character.isGrounded)
+        {
+            character.stepOffset = originalStepOffset;
+            gravity = -0.5f;
+            if (Input.GetButtonDown("Jump"))
+            {
+                gravity = jumpSpeed;
+            }
+        }
+        else
+        {
+            character.stepOffset = 0;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            currentState = PlayerState.attack;
+            Debug.Log("Test");
+        }
 
         switch (currentState)
         {
@@ -53,25 +87,33 @@ public class ThirdPersonMovement : MonoBehaviour
 
                 break;
             case PlayerState.attack:
-                anim.SetTrigger("Attack1");
+                StartCoroutine(Attack());
                 break;
             default:
                 break;
         }
 
-        if(direction.magnitude >= 0.1f)
+        if(direction.magnitude >= 0.1f && !isAttacking)
         {
             currentState = PlayerState.walk;
             return;
         }
-            
+        else if(direction.magnitude <=0f && !isAttacking){
+            currentState = PlayerState.idle;
+        }
+
         
-        currentState = PlayerState.idle;
     }
 
-    private void OnMouseDown()
+    public IEnumerator Attack()
     {
-        Debug.Log("Test");
-        currentState = PlayerState.attack;
+        isAttacking = true;
+        anim.SetTrigger("Attack1");
+        character.center = new Vector3(0, 2.5f , 4);
+        yield return new WaitForSecondsRealtime(0.4f);
+        character.center = new Vector3(0, 2.5f, 0);
+        isAttacking = false;
+        currentState = PlayerState.idle;
+        
     }
 }

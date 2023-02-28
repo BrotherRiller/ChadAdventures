@@ -109,7 +109,7 @@ public class ThirdPersonMovement : MonoBehaviour
     {
         isAttacking = true;
         anim.SetTrigger("Attack1");
-        character.center = new Vector3(0, 2.5f , 4);
+        character.center = new Vector3(0, 2.5f , 6);
         yield return new WaitForSecondsRealtime(0.4f);
         character.center = new Vector3(0, 2.5f, 0);
         isAttacking = false;

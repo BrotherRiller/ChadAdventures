@@ -5,6 +5,8 @@ using UnityEngine;
 public class LevelSelector : MonoBehaviour
 {
     [SerializeField] GameObject nextLevel;
+    [SerializeField] GameObject sun;
+    [SerializeField] float rotation;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -12,6 +14,7 @@ public class LevelSelector : MonoBehaviour
         {
             nextLevel.SetActive(true);
             this.gameObject.SetActive(false);
+            sun.transform.Rotate(Vector3.right * rotation);
         }
     }
 
